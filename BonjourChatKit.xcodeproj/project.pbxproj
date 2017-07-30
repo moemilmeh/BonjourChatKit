@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9643CF331F2D394400CE9DDB /* BonjourChatServicePublisher.h in Headers */ = {isa = PBXBuildFile; fileRef = 9643CF311F2D394400CE9DDB /* BonjourChatServicePublisher.h */; };
+		9643CF341F2D394400CE9DDB /* BonjourChatServicePublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9643CF321F2D394400CE9DDB /* BonjourChatServicePublisher.m */; };
+		9643CF351F2D394400CE9DDB /* BonjourChatServicePublisher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9643CF321F2D394400CE9DDB /* BonjourChatServicePublisher.m */; };
 		9698ABB01F2D2A65002A5929 /* BonjourChatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9698ABA61F2D2A65002A5929 /* BonjourChatKit.framework */; };
 		9698ABB51F2D2A65002A5929 /* BonjourChatKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9698ABB41F2D2A65002A5929 /* BonjourChatKitTests.m */; };
 		9698ABB71F2D2A65002A5929 /* BonjourChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -23,6 +26,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9643CF311F2D394400CE9DDB /* BonjourChatServicePublisher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourChatServicePublisher.h; sourceTree = "<group>"; };
+		9643CF321F2D394400CE9DDB /* BonjourChatServicePublisher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourChatServicePublisher.m; sourceTree = "<group>"; };
 		9698ABA61F2D2A65002A5929 /* BonjourChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BonjourChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BonjourChatKit.h; sourceTree = "<group>"; };
 		9698ABAA1F2D2A65002A5929 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -73,6 +78,8 @@
 			children = (
 				9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */,
 				9698ABAA1F2D2A65002A5929 /* Info.plist */,
+				9643CF311F2D394400CE9DDB /* BonjourChatServicePublisher.h */,
+				9643CF321F2D394400CE9DDB /* BonjourChatServicePublisher.m */,
 			);
 			path = BonjourChatKit;
 			sourceTree = "<group>";
@@ -94,6 +101,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9698ABB71F2D2A65002A5929 /* BonjourChatKit.h in Headers */,
+				9643CF331F2D394400CE9DDB /* BonjourChatServicePublisher.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,6 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9643CF341F2D394400CE9DDB /* BonjourChatServicePublisher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9643CF351F2D394400CE9DDB /* BonjourChatServicePublisher.m in Sources */,
 				9698ABB51F2D2A65002A5929 /* BonjourChatKitTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,6 +412,7 @@
 				9698ABBC1F2D2A65002A5929 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9698ABBD1F2D2A65002A5929 /* Build configuration list for PBXNativeTarget "BonjourChatKitTests" */ = {
 			isa = XCConfigurationList;
@@ -410,6 +421,7 @@
 				9698ABBF1F2D2A65002A5929 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

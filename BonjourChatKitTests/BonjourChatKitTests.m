@@ -2,11 +2,12 @@
 //  BonjourChatKitTests.m
 //  BonjourChatKitTests
 //
-//  Created by work on 7/29/17.
+//  Created by MMM on 7/29/17.
 //  Copyright © 2017 MoeMilMeh. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
+#import "BonjourChatServicePublisher.h"
 
 @interface BonjourChatKitTests : XCTestCase
 
@@ -17,6 +18,23 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    BonjourChatServicePublisher *publisher = [[BonjourChatServicePublisher alloc] initWithServiceName:@"MoeMil"];
+    [publisher setUserAge:22];
+    [publisher setUserDesiredAge:45];
+    
+    [publisher setUserSex:UserSexMale];
+    [publisher setUserDesiredSex:UserSexFemale];
+    
+    sleep(3);
+    
+    
+    [publisher publishChatService];
+    sleep(20);
+    
+    
+    NSLog(@"Number Age: %zd", [publisher userAgeTXTRecord]);
+    
 }
 
 - (void)tearDown {

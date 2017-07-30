@@ -2,7 +2,7 @@
 //  BonjourChatKit.h
 //  BonjourChatKit
 //
-//  Created by work on 7/29/17.
+//  Created by MMM on 7/29/17.
 //  Copyright © 2017 MoeMilMeh. All rights reserved.
 //
 
