@@ -50,8 +50,21 @@ NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
 {
     if (self = [super init]) {
         
+        
+        //----------------------------
+        // 1. Configure a socket
+        //----------------------------
+
         _port = port;
+        
+        //-----------------------------
+        // 2. Init. a network service
+        //-----------------------------
         _service = [[NSNetService alloc] initWithDomain:domain type:type name:name port:port];
+        
+        //-----------------------------
+        // 3. Set the delegate
+        //-----------------------------
         [_service setDelegate:self];
         
     }

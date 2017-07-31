@@ -19,6 +19,19 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
+//    NSLog(@"Number Age: %zd", [publisher userAgeTXTRecord]);
+    
+}
+
+- (void)tearDown {
+    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
+}
+
+- (void)testExample {
+    // This is an example of a functional test case.
+    // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
     BonjourChatServicePublisher *publisher = [[BonjourChatServicePublisher alloc] initWithServiceName:@"MoeMil"];
     [publisher setUserAge:22];
     [publisher setUserDesiredAge:45];
@@ -32,19 +45,6 @@
     [publisher publishChatService];
     sleep(20);
     
-    
-    NSLog(@"Number Age: %zd", [publisher userAgeTXTRecord]);
-    
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
 }
 
 - (void)testPerformanceExample {

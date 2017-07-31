@@ -27,7 +27,6 @@ typedef NS_ENUM(uint8_t, UserSex)
 
 @property (nonatomic) uint8_t userAge;
 @property (nonatomic) uint8_t userDesiredAge;
-- (uint8_t)userAgeTXTRecord;
 
 #pragma mark - Init.
 
