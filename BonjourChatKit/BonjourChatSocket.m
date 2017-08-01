@@ -152,10 +152,8 @@ static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDat
 
 - (void)createConnetionWithInputStream:(NSInputStream *)inputStream outputStream:(NSOutputStream *)outputStream
 {
-    
-    BonjourChatConnection *bonjourChatConnection = [[BonjourChatConnection alloc] initWithInputStream:inputStream outputStream:outputStream];
-    
     if ([[self delegate] respondsToSelector:@selector(bonjourChatSocket:didCreateConnection:)]) {
+        BonjourChatConnection *bonjourChatConnection = [[BonjourChatConnection alloc] initWithInputStream:inputStream outputStream:outputStream];
         dispatch_async([self delegateQueue], ^{
             [[self delegate] bonjourChatSocket:self didCreateConnection:bonjourChatConnection];
         });
@@ -170,7 +168,6 @@ static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDat
 
 static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info)
 {
-    
     CFSocketContext localContext;
     CFSocketGetContext(s, &localContext);
     

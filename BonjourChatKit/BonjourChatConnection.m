@@ -28,7 +28,6 @@ static const char *delegateQueueString          = "BonjourChatKit.BonjourChatCon
 
 - (instancetype)initWithInputStream:(NSInputStream *)inputStream outputStream:(NSOutputStream *)outputStream
 {
-    
     if (self = [super init]) {
         
         _dataToWrite = [NSMutableData data];

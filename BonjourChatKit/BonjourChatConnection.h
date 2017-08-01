@@ -16,11 +16,11 @@
 
 - (instancetype)initWithInputStream:(NSInputStream *)inputStream outputStream:(NSOutputStream *)outputStream;
 
-- (void)sendData:(NSData *)data;
-
 - (void)openConnection;
 - (void)closeConnection;
 - (void)closeStream:(NSStream *)stream;
+
+- (void)sendData:(NSData *)data;
 
 @end
 
