@@ -27,16 +27,14 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #import <CFNetwork/CFNetwork.h>
+#import "BonjourChatConnection.h"
 
-#define MAX_BUFFER_SIZE         40960
+static const char *delegateQueueString          = "BonjourChatKit.BonjourChatSocket.DelegateQ";
 
 static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info);
 
-static const char *streamQueueString            = "BonjourChatKit.BonjourChatSocket.StreamQ";
-static const char *delegateQueueString          = "BonjourChatKit.BonjourChatSocket.DelegateQ";
 
-
-@interface BonjourChatSocket () <NSStreamDelegate>
+@interface BonjourChatSocket () 
 
 @property (nonatomic) CFSocketRef ipv6Socket;
 @property (nonatomic) CFSocketRef ipv4Socket;
@@ -44,30 +42,26 @@ static const char *delegateQueueString          = "BonjourChatKit.BonjourChatSoc
 @property (nonatomic, copy) NSString *ipv4Address;
 @property (nonatomic, copy) NSString *ipv6Address;
 
-@property (nonatomic) NSInputStream *inputStream;
-@property (nonatomic) NSOutputStream *outputStream;
-@property (nonatomic) NSMutableData *dataToWrite;
-
-@property (nonatomic) dispatch_queue_t streamQueue;
 @property (nonatomic) dispatch_queue_t delegateQueue;
 
 @end
 
 @implementation BonjourChatSocket
 
-- (instancetype)init
+- (instancetype)initWithPort:(int)port
 {
     if (self = [super init]) {
-    
-        _dataToWrite = [NSMutableData data];
-        _streamQueue = dispatch_queue_create(streamQueueString, DISPATCH_QUEUE_SERIAL);
+        
         _delegateQueue = dispatch_queue_create(delegateQueueString, DISPATCH_QUEUE_CONCURRENT);
+        if ([self createServerSocketsWithPort:port] == NO) {
+            return nil;
+        }
     }
     
     return self;
 }
 
-- (BOOL)createServerSockets
+- (BOOL)createServerSocketsWithPort:(int)port
 {
     //-------------------------------------------
     // 1. Create socket objects
@@ -92,7 +86,7 @@ static const char *delegateQueueString          = "BonjourChatKit.BonjourChatSoc
     
     sin.sin_len = sizeof(sin);
     sin.sin_family = AF_INET;
-    sin.sin_port = htons(0);
+    sin.sin_port = htons(port);
     sin.sin_addr.s_addr = INADDR_ANY;
     
     CFDataRef sincfd = CFDataCreate(kCFAllocatorDefault, (UInt8 *)&sin, sizeof(sin));
@@ -122,11 +116,11 @@ static const char *delegateQueueString          = "BonjourChatKit.BonjourChatSoc
     
     sin6.sin6_len = sizeof(sin6);
     sin6.sin6_family = AF_INET6;
-    sin6.sin6_port = htons(0);
+    sin6.sin6_port = htons(port);
     sin6.sin6_addr = in6addr_any;
     
     CFDataRef sin6cfd = CFDataCreate(kCFAllocatorDefault, (UInt8 *)&sin6, sizeof(sin6));
-    if (CFSocketSetAddress(_ipv6Socket, sincfd) != kCFSocketSuccess) {
+    if (CFSocketSetAddress(_ipv6Socket, sin6cfd) != kCFSocketSuccess) {
         NSLog(@"Failed to bind a local address to ipv6 socket");
         if (_ipv6Socket) {
             CFRelease(_ipv6Socket);
@@ -139,7 +133,6 @@ static const char *delegateQueueString          = "BonjourChatKit.BonjourChatSoc
     NSData *ipv6Addr = (__bridge_transfer NSData *)CFSocketCopyAddress(_ipv6Socket);
     memcpy(&sin6, [ipv6Addr bytes], [ipv4Addr length]);
     _ipv6Port = ntohs(sin6.sin6_port);
-    
     
     char ipv6Address[INET6_ADDRSTRLEN];
     inet_ntop(AF_INET6, &(sin6.sin6_addr), ipv6Address, sizeof(ipv6Address));
@@ -159,171 +152,15 @@ static const char *delegateQueueString          = "BonjourChatKit.BonjourChatSoc
 
 - (void)createConnetionWithInputStream:(NSInputStream *)inputStream outputStream:(NSOutputStream *)outputStream
 {
-    //---------------------
-    // Input stream
-    //---------------------
-    if ([self inputStream]) {
-        [self closeStream:self.inputStream];
-    }
-    [self setInputStream:inputStream];
-    [[self inputStream] setDelegate:self];
-    [[self inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [[self inputStream] open];
     
-    //---------------------
-    // Output stream
-    //---------------------
-    if ([self outputStream]) {
-        [self closeStream:self.outputStream];
-    }
-    [self setOutputStream:outputStream];
-    [[self outputStream] setDelegate:self];
-    [[self outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [[self outputStream] open];
-}
-
-- (void)closeStream:(NSStream *)stream
-{
-    if ([stream streamStatus] != NSStreamStatusClosed) {
-        [stream close];
-    }
-    [stream setDelegate:nil];
-    [stream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    BonjourChatConnection *bonjourChatConnection = [[BonjourChatConnection alloc] initWithInputStream:inputStream outputStream:outputStream];
     
-    if ([[self delegate] respondsToSelector:@selector(bonjourChatSocket:didCloseStream:)]) {
+    if ([[self delegate] respondsToSelector:@selector(bonjourChatSocket:didCreateConnection:)]) {
         dispatch_async([self delegateQueue], ^{
-            [[self delegate] bonjourChatSocket:self didCloseStream:stream];
+            [[self delegate] bonjourChatSocket:self didCreateConnection:bonjourChatConnection];
         });
     }
 }
-
-#pragma mark - Read Data
-
-- (void)readDataFromStram:(NSInputStream *)inputStream
-{
-    while ([inputStream hasBytesAvailable]) {
-        
-        uint8_t buffer[MAX_BUFFER_SIZE];
-        NSInteger readDataLength = [inputStream read:buffer maxLength:MAX_BUFFER_SIZE];
-        
-        if (readDataLength == 0) {
-            
-            // This indicates the socket was closed by the client
-            NSLog(@"Socket was closed by the client");
-            
-            // TODO: Close the streams
-            return;
-        
-        } else if (readDataLength < 0) {
-            NSLog(@"Failed to read the data");
-        
-        } else {
-            
-            NSData *data = [NSData dataWithBytes:buffer length:readDataLength];
-            
-            if ([[self delegate] respondsToSelector:@selector(bonjourChatSocket:didReceiveData:)]) {
-                dispatch_async([self delegateQueue], ^{
-                    [[self delegate] bonjourChatSocket:self didReceiveData:data];
-                });
-            }
-        }
-    }
-}
-
-
-#pragma mark - Write Data
-
-- (void)writeData:(NSData *)data
-{
-    dispatch_async([self streamQueue], ^{
-        [_dataToWrite appendData:data];
-    });
-}
-
-- (void)writeData
-{
-    dispatch_async([self streamQueue], ^{
-        
-        // Skip if there are no more data to write
-        if (![[self dataToWrite] length]) {
-            return;
-        }
-        
-        if ([self outputStream]) {
-            
-            // TODO: Update error
-            NSError *error;
-            NSData *dataToWrite = _dataToWrite;
-            
-            NSUInteger dataLength = [_dataToWrite length];
-            NSInteger dataWritten = [[self outputStream] write:[_dataToWrite bytes] maxLength:dataLength];
-            
-            if (dataWritten <= 0) {
-                NSLog(@"Failed to write data: %@", _dataToWrite);
-                
-            } else {
-                
-                NSUInteger remainingData = dataLength - dataWritten;
-                _dataToWrite = [NSMutableData dataWithData:[dataToWrite subdataWithRange:NSMakeRange(dataWritten, remainingData)]];
-            }
-            
-            if ([[self delegate] respondsToSelector:@selector(bonjourChatSocket:didWriteData:withError:)]) {
-                dispatch_async([self delegateQueue], ^{
-                    [[self delegate] bonjourChatSocket:self didWriteData:dataToWrite withError:error];
-                });
-            }
-        }
-    });
-}
-
-#pragma mark - NSStreamDelegate Callbacks
-
-- (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
-{
-    switch (eventCode) {
-        
-        case NSStreamEventOpenCompleted:
-            
-            if ([[self delegate] respondsToSelector:@selector(bonjourChatSocket:didOpenStream:)]) {
-                dispatch_async([self delegateQueue], ^{
-                    [[self delegate] bonjourChatSocket:self didOpenStream:aStream];
-                });
-            }
-            NSLog(@"Stream: %@ did open", aStream);
-            break;
-        
-        case NSStreamEventHasSpaceAvailable:
-            
-            if ([[self dataToWrite] length]) {
-                [self writeData];
-            }
-            NSLog(@"Stream: %@ has space available", aStream);
-            break;
-        
-        case NSStreamEventHasBytesAvailable:
-            
-            [self readDataFromStram:(NSInputStream *)aStream];
-            NSLog(@"Stream: %@ has bytes available", aStream);
-            break;
-        
-        case NSStreamEventErrorOccurred:
-            
-            NSLog(@"Stream: %@ error occurred: %@", aStream, [aStream streamError]);
-            [self closeStream:aStream];
-            break;
-        
-        case NSStreamEventEndEncountered:
-            
-            NSLog(@"Stream: %@ end oncountered", aStream);
-            [self closeStream:aStream];
-            break;
-            
-        default:
-            NSLog(@"Stream: %@ received event: %@", aStream, @(eventCode));
-            break;
-    }
-}
-
 
 @end
 
@@ -367,9 +204,8 @@ static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDat
             CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
             CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
 
-            // Setup the input and output streams
             [bonjourChatSocket createConnetionWithInputStream:(__bridge_transfer NSInputStream*)readStream outputStream:(__bridge_transfer NSOutputStream *)writeStream];
-            
+           
             
             if (readStream) {
                 CFRelease(readStream);

@@ -16,6 +16,8 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #import "BonjourChatServicePublisher.h"
+#import "BonjourChatSocket.h"
+#import "BonjourChatConnection.h"
 
 NSString *const BonjourChatServiceDomainName                = @"";
 NSString *const BonjourChatServiceType                      = @"_chat._tcp.";
@@ -26,7 +28,11 @@ NSString *const BonjourChatServiceUserDesiredSex            = @"DSex";
 NSString *const BonjourChatServiceUserAge                   = @"Age";
 NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
 
-@interface BonjourChatServicePublisher ()
+
+@interface BonjourChatServicePublisher () <BonjourChatSocketDelegate, BonjourChatConnectionDelegate>
+
+@property (nonatomic) BonjourChatSocket *bonjourChatSocket;
+@property (nonatomic) NSMutableArray<BonjourChatConnection *> *bonjourChatConnections;
 
 @end
 
@@ -50,17 +56,17 @@ NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
 {
     if (self = [super init]) {
         
-        
         //----------------------------
         // 1. Configure a socket
         //----------------------------
-
-        _port = port;
+        _bonjourChatSocket = [[BonjourChatSocket alloc] initWithPort:port];
+        [_bonjourChatSocket setDelegate:self];
+        _bonjourChatConnections = [NSMutableArray array];
         
         //-----------------------------
         // 2. Init. a network service
         //-----------------------------
-        _service = [[NSNetService alloc] initWithDomain:domain type:type name:name port:port];
+        _service = [[NSNetService alloc] initWithDomain:domain type:type name:name port:[_bonjourChatSocket port]];
         
         //-----------------------------
         // 3. Set the delegate
@@ -75,7 +81,7 @@ NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
 - (void)publishChatService
 {
     if ([self service]) {
-        
+    
         // User Info
         [self setUserSexTXTRecord:[self userSex]];
         [self setUserAgeTXTRecord:[self userAge]];
@@ -89,7 +95,6 @@ NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
 
 - (void)updateRecordData:(NSData *)recordData
 {
-    
     NSDictionary *txtRecord = [NSNetService dictionaryFromTXTRecordData:recordData];
     if (txtRecord) {
         [[self service] setTXTRecordData:recordData];
@@ -174,6 +179,34 @@ NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     return [formatter numberFromString:numberString];
+}
+
+
+#pragma mark - BonjourChatConnectionDelegate
+
+- (void)bonjourChatConnection:(BonjourChatConnection *)bonjourChatConnection didReceiveData:(NSData *)data
+{
+    NSLog(@"Did receive data: %@ from %@", data, bonjourChatConnection);
+}
+
+- (void)bonjourChatConnection:(BonjourChatConnection *)bonjourChatConnection didWriteData:(NSData *)data withError:(NSError *)error
+{
+}
+
+- (void)bonjourChatConnection:(BonjourChatConnection *)bonjourChatConnection didCloseStream:(NSStream *)stream
+{
+    if ([[self bonjourChatConnections] containsObject:bonjourChatConnection]) {
+        [[self bonjourChatConnections] removeObject:bonjourChatConnection];
+    }
+}
+
+#pragma mark - BonjourChatSocketDelegate
+
+- (void)bonjourChatSocket:(BonjourChatSocket *)bonjourChatSocket didCreateConnection:(BonjourChatConnection *)chatConnection
+{
+    [[self bonjourChatConnections] addObject:chatConnection];
+    [chatConnection setDelegate:self];
+    [chatConnection openConnection];
 }
 
 #pragma mark - NSNetServiceDelegate

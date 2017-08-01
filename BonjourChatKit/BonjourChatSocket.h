@@ -10,6 +10,8 @@
 
 @protocol BonjourChatSocketDelegate;
 
+@class BonjourChatConnection;
+
 @interface BonjourChatSocket : NSObject
 
 @property (nonatomic, readonly) int port;
@@ -17,18 +19,17 @@
 
 @property (nonatomic, weak) id<BonjourChatSocketDelegate>delegate;
 
-- (void)writeData:(NSData *)data;
+- (instancetype)initWithPort:(int)port;
 
 @end
 
-@protocol BonjourChatSocketDelegate <NSObject>
 
+#pragma mark - BonjourChatSocketDelegate
+
+@protocol BonjourChatSocketDelegate <NSObject>
 
 @optional
 
-- (void)bonjourChatSocket:(BonjourChatSocket *)bonjourChatSocket didOpenStream:(NSStream *)stream;
-- (void)bonjourChatSocket:(BonjourChatSocket *)bonjourChatSocket didCloseStream:(NSStream *)stream;
-- (void)bonjourChatSocket:(BonjourChatSocket *)bonjourChatSocket didReceiveData:(NSData *)data;
-- (void)bonjourChatSocket:(BonjourChatSocket *)bonjourChatSocket didWriteData:(NSData *)data withError:(NSError *)error;
+- (void)bonjourChatSocket:(BonjourChatSocket *)bonjourChatSocket didCreateConnection:(BonjourChatConnection *)chatConnection;
 
 @end
