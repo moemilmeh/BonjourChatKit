@@ -16,6 +16,12 @@
 		9643CF3D1F303B1B00CE9DDB /* BonjourChatConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 9643CF3B1F303B1B00CE9DDB /* BonjourChatConnection.h */; };
 		9643CF3E1F303B1B00CE9DDB /* BonjourChatConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9643CF3C1F303B1B00CE9DDB /* BonjourChatConnection.m */; };
 		9643CF3F1F303B1B00CE9DDB /* BonjourChatConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9643CF3C1F303B1B00CE9DDB /* BonjourChatConnection.m */; };
+		965E754C1F3972E5005071DA /* BonjourChatServiceBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 965E754A1F3972E5005071DA /* BonjourChatServiceBrowser.h */; };
+		965E754D1F3972E5005071DA /* BonjourChatServiceBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 965E754B1F3972E5005071DA /* BonjourChatServiceBrowser.m */; };
+		965E754E1F3972E5005071DA /* BonjourChatServiceBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 965E754B1F3972E5005071DA /* BonjourChatServiceBrowser.m */; };
+		965E75511F397516005071DA /* BonjourChatConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 965E754F1F397516005071DA /* BonjourChatConstants.h */; };
+		965E75521F397516005071DA /* BonjourChatConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 965E75501F397516005071DA /* BonjourChatConstants.m */; };
+		965E75531F397516005071DA /* BonjourChatConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 965E75501F397516005071DA /* BonjourChatConstants.m */; };
 		9698ABB01F2D2A65002A5929 /* BonjourChatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9698ABA61F2D2A65002A5929 /* BonjourChatKit.framework */; };
 		9698ABB51F2D2A65002A5929 /* BonjourChatKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9698ABB41F2D2A65002A5929 /* BonjourChatKitTests.m */; };
 		9698ABB71F2D2A65002A5929 /* BonjourChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +44,10 @@
 		9643CF371F2E9B7700CE9DDB /* BonjourChatSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourChatSocket.m; sourceTree = "<group>"; };
 		9643CF3B1F303B1B00CE9DDB /* BonjourChatConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourChatConnection.h; sourceTree = "<group>"; };
 		9643CF3C1F303B1B00CE9DDB /* BonjourChatConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourChatConnection.m; sourceTree = "<group>"; };
+		965E754A1F3972E5005071DA /* BonjourChatServiceBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourChatServiceBrowser.h; sourceTree = "<group>"; };
+		965E754B1F3972E5005071DA /* BonjourChatServiceBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourChatServiceBrowser.m; sourceTree = "<group>"; };
+		965E754F1F397516005071DA /* BonjourChatConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourChatConstants.h; sourceTree = "<group>"; };
+		965E75501F397516005071DA /* BonjourChatConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourChatConstants.m; sourceTree = "<group>"; };
 		9698ABA61F2D2A65002A5929 /* BonjourChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BonjourChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BonjourChatKit.h; sourceTree = "<group>"; };
 		9698ABAA1F2D2A65002A5929 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -88,12 +98,16 @@
 			children = (
 				9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */,
 				9698ABAA1F2D2A65002A5929 /* Info.plist */,
+				965E754A1F3972E5005071DA /* BonjourChatServiceBrowser.h */,
+				965E754B1F3972E5005071DA /* BonjourChatServiceBrowser.m */,
 				9643CF311F2D394400CE9DDB /* BonjourChatServicePublisher.h */,
 				9643CF321F2D394400CE9DDB /* BonjourChatServicePublisher.m */,
 				9643CF361F2E9B7700CE9DDB /* BonjourChatSocket.h */,
 				9643CF371F2E9B7700CE9DDB /* BonjourChatSocket.m */,
 				9643CF3B1F303B1B00CE9DDB /* BonjourChatConnection.h */,
 				9643CF3C1F303B1B00CE9DDB /* BonjourChatConnection.m */,
+				965E754F1F397516005071DA /* BonjourChatConstants.h */,
+				965E75501F397516005071DA /* BonjourChatConstants.m */,
 			);
 			path = BonjourChatKit;
 			sourceTree = "<group>";
@@ -116,6 +130,8 @@
 			files = (
 				9643CF3D1F303B1B00CE9DDB /* BonjourChatConnection.h in Headers */,
 				9698ABB71F2D2A65002A5929 /* BonjourChatKit.h in Headers */,
+				965E75511F397516005071DA /* BonjourChatConstants.h in Headers */,
+				965E754C1F3972E5005071DA /* BonjourChatServiceBrowser.h in Headers */,
 				9643CF331F2D394400CE9DDB /* BonjourChatServicePublisher.h in Headers */,
 				9643CF381F2E9B7700CE9DDB /* BonjourChatSocket.h in Headers */,
 			);
@@ -221,6 +237,8 @@
 			files = (
 				9643CF391F2E9B7700CE9DDB /* BonjourChatSocket.m in Sources */,
 				9643CF341F2D394400CE9DDB /* BonjourChatServicePublisher.m in Sources */,
+				965E754D1F3972E5005071DA /* BonjourChatServiceBrowser.m in Sources */,
+				965E75521F397516005071DA /* BonjourChatConstants.m in Sources */,
 				9643CF3E1F303B1B00CE9DDB /* BonjourChatConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,6 +249,8 @@
 			files = (
 				9643CF351F2D394400CE9DDB /* BonjourChatServicePublisher.m in Sources */,
 				9643CF3F1F303B1B00CE9DDB /* BonjourChatConnection.m in Sources */,
+				965E754E1F3972E5005071DA /* BonjourChatServiceBrowser.m in Sources */,
+				965E75531F397516005071DA /* BonjourChatConstants.m in Sources */,
 				9698ABB51F2D2A65002A5929 /* BonjourChatKitTests.m in Sources */,
 				9643CF3A1F2E9B7700CE9DDB /* BonjourChatSocket.m in Sources */,
 			);

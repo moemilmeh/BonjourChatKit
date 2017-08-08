@@ -18,15 +18,7 @@
 #import "BonjourChatServicePublisher.h"
 #import "BonjourChatSocket.h"
 #import "BonjourChatConnection.h"
-
-NSString *const BonjourChatServiceDomainName                = @"";
-NSString *const BonjourChatServiceType                      = @"_chat._tcp.";
-
-NSString *const BonjourChatServiceUserSex                   = @"Sex";
-NSString *const BonjourChatServiceUserDesiredSex            = @"DSex";
-
-NSString *const BonjourChatServiceUserAge                   = @"Age";
-NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
+#import "BonjourChatConstants.h"
 
 
 @interface BonjourChatServicePublisher () <BonjourChatSocketDelegate, BonjourChatConnectionDelegate>
@@ -72,7 +64,6 @@ NSString *const BonjourChatServiceUserDesiredAge            = @"DAge";
         // 3. Set the delegate
         //-----------------------------
         [_service setDelegate:self];
-        
     }
     
     return self;
