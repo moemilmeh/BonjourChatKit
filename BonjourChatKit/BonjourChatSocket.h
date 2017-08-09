@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol BonjourChatSocketDelegate;
+@protocol BonjourChatServerSocketDelegate;
 
 @class BonjourChatConnection;
 
@@ -17,19 +17,20 @@
 @property (nonatomic, readonly) int port;
 @property (nonatomic, readonly) int ipv6Port;
 
-@property (nonatomic, weak) id<BonjourChatSocketDelegate>delegate;
+@property (nonatomic, weak) id<BonjourChatServerSocketDelegate>serverDelegate;
 
 - (instancetype)initWithPort:(int)port;
 
 @end
 
 
-#pragma mark - BonjourChatSocketDelegate
+#pragma mark - BonjourChatServerSocketDelegate
 
-@protocol BonjourChatSocketDelegate <NSObject>
+@protocol BonjourChatServerSocketDelegate <NSObject>
 
 @optional
 
 - (void)bonjourChatSocket:(BonjourChatSocket *)bonjourChatSocket didCreateConnection:(BonjourChatConnection *)chatConnection;
 
 @end
+

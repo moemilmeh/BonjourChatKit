@@ -12,6 +12,8 @@
 
 @interface BonjourChatKitTests : XCTestCase
 
+@property (nonatomic)BonjourChatServiceBrowser *browser;
+
 @end
 
 @implementation BonjourChatKitTests
@@ -48,8 +50,8 @@
 //    
     
     // Put the code you want to measure the time of here.
-    BonjourChatServiceBrowser *browser = [[BonjourChatServiceBrowser alloc] initWithServiceType:@"_homekit._tcp." domainName:@"local"];
-    [browser startBrowsing];
+    _browser = [[BonjourChatServiceBrowser alloc] initWithServiceType:@"_homekit._tcp." domainName:@"local"];
+    [_browser startBrowsing];
     
     sleep(10);
     

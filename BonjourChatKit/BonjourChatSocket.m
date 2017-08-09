@@ -13,6 +13,10 @@
 //
 // Client:
 //
+//    1. Create socket objects for ipv4 and ipv6
+//    2. Bind the sockets
+//    3. Connect to the server(s)
+//
 //
 // Server:
 //
@@ -60,6 +64,9 @@ static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDat
     
     return self;
 }
+
+
+#pragma mark - Server Socket
 
 - (BOOL)createServerSocketsWithPort:(int)port
 {
@@ -152,10 +159,10 @@ static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDat
 
 - (void)createConnetionWithInputStream:(NSInputStream *)inputStream outputStream:(NSOutputStream *)outputStream
 {
-    if ([[self delegate] respondsToSelector:@selector(bonjourChatSocket:didCreateConnection:)]) {
+    if ([[self serverDelegate] respondsToSelector:@selector(bonjourChatSocket:didCreateConnection:)]) {
         BonjourChatConnection *bonjourChatConnection = [[BonjourChatConnection alloc] initWithInputStream:inputStream outputStream:outputStream];
         dispatch_async([self delegateQueue], ^{
-            [[self delegate] bonjourChatSocket:self didCreateConnection:bonjourChatConnection];
+            [[self serverDelegate] bonjourChatSocket:self didCreateConnection:bonjourChatConnection];
         });
     }
 }

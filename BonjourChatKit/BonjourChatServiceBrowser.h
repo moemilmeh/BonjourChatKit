@@ -27,11 +27,15 @@
 
 - (void)startBrowsing;
 - (void)stopBrowsing;
+- (BOOL)connectToServer;
+- (void)disconnectFromServer;
 
 @end
 
 @protocol BonjourChatServiceBrowserDelegate <NSObject>
 
 @optional
+
+
 
 @end

@@ -38,6 +38,7 @@ typedef NS_ENUM(uint8_t, UserSex)
 #pragma mark - Methods
 
 - (void)publishChatService;
+- (void)stopPublish;
 
 
 @end

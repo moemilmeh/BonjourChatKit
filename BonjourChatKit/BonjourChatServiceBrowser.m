@@ -18,12 +18,16 @@
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #import "BonjourChatServiceBrowser.h"
+#import "BonjourChatSocket.h"
+#import "BonjourChatConnection.h"
 #import "BonjourChatConstants.h"
 
-@interface BonjourChatServiceBrowser ()
+@interface BonjourChatServiceBrowser () <BonjourChatConnectionDelegate>
 
-@property (nonatomic) NSMutableSet *disocveredServices;
-@property (atomic, assign) BOOL searching;
+@property (nonatomic) NSMutableSet <NSNetService *> *disocveredChatServices;
+@property (nonatomic) BonjourChatSocket *bonjourChatSocket;
+@property (nonatomic) BonjourChatConnection *bonjourChatConnection;
+@property (nonatomic, assign) BOOL connected;
 
 @end
 
@@ -49,12 +53,12 @@
         // 1. Init. service browser
         //----------------------------
         _serviceBrowser = [[NSNetServiceBrowser alloc] init];
-        _disocveredServices = [NSMutableSet set];
+        [_serviceBrowser setDelegate:self];
         
+        _disocveredChatServices = [NSMutableSet set];
         _serviceType = type;
         _serviceDomain = domain;
-        _searching = NO;
-        [_serviceBrowser setDelegate:self];
+        _connected = NO;
     }
     
     return self;
@@ -84,25 +88,105 @@
     }
 }
 
+- (BOOL)connectToServer
+{
+    NSNetService *chatService = [self chatServerService];
+    NSString *host = [chatService hostName];
+    NSInteger port = [chatService port];
+    
+    if (!host) {
+        NSLog(@"Failed to discover the chat server to connect to");
+        return NO;
+    }
+    
+    NSLog(@"Trying to connect to the chat service: %@", chatService);
+    
+    CFReadStreamRef readStream;
+    CFWriteStreamRef writeStream;
+    CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, (__bridge CFStringRef)host, (UInt32)port, &readStream, &writeStream);
+    
+    if (!readStream || !writeStream) {
+        return NO;
+    }
+    
+    // Set the stream properties: Close the socket when the streams are released
+    CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    
+    _bonjourChatConnection = [[BonjourChatConnection alloc] initWithInputStream:(__bridge_transfer NSInputStream *)readStream outputStream:(__bridge_transfer NSOutputStream *)writeStream];
+    [_bonjourChatConnection setDelegate:self];
+    [_bonjourChatConnection openConnection];
+    
+    if (readStream) {
+        CFRelease(readStream);
+    }
+    
+    if (writeStream) {
+        CFRelease(writeStream);
+    }
+    
+    [self setConnected:YES];
+    
+    return YES;
+}
+
+- (void)disconnectFromServer
+{
+    [[self bonjourChatConnection] closeConnection];
+    [self setConnected:NO];
+}
+
+
+- (NSNetService *)chatServerService
+{
+    for (NSNetService *service in [[self disocveredChatServices] allObjects]) {
+        
+        if ([[service type] isEqualToString:BonjourChatServiceType]) {
+            return service;
+        }
+    }
+    
+    return nil;
+}
+
+#pragma mark - BonjourChatConnectionDelegate
+
+- (void)bonjourChatConnection:(BonjourChatConnection *)bonjourChatConnection didOpenStream:(NSStream *)stream
+{
+    
+}
+
+- (void)bonjourChatConnection:(BonjourChatConnection *)bonjourChatConnection didCloseStream:(NSStream *)stream
+{
+    
+}
+
+- (void)bonjourChatConnection:(BonjourChatConnection *)bonjourChatConnection didReceiveData:(NSData *)data
+{
+    // TODO: Handle incoming data
+}
+
+- (void)bonjourChatConnection:(BonjourChatConnection *)bonjourChatConnection didWriteData:(NSData *)data withError:(NSError *)error
+{
+    // TODO: Handle ack. for outgoing data
+}
+
 
 #pragma mark - NSNetServiceBrowserDelegate
 
 - (void)netServiceBrowserWillSearch:(NSNetServiceBrowser *)browser
 {
     NSLog(@"Service browser: %@ will search", browser);
-    [self setSearching:YES];
 }
 
 - (void)netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)browser
 {
     NSLog(@"Service browser: %@ did stop search", browser);
-    [self setSearching:NO];
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didNotSearch:(NSDictionary<NSString *, NSNumber *> *)errorDict
 {
     NSLog(@"Service browser: %@ did not search with error: %@", browser, errorDict);
-    [self setSearching:NO];
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindDomain:(NSString *)domainString moreComing:(BOOL)moreComing
@@ -113,7 +197,10 @@
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)moreComing
 {
     NSLog(@"Service browser: %@ did find service: %@ and more coming: %@", browser, service, @(moreComing));
-    [[self disocveredServices] addObject:service];
+    
+    if ([[service type] isEqualToString:[self serviceType]]) {
+        [[self disocveredChatServices] addObject:service];
+    }
     
     if (!moreComing) {
         
@@ -129,7 +216,7 @@
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)service moreComing:(BOOL)moreComing
 {
     NSLog(@"Service browser: %@ did remove service: %@ and more coming: %@", browser, service, @(moreComing));
-    [[self disocveredServices] removeObject:service];
+    [[self disocveredChatServices] removeObject:service];
 }
 
 @end

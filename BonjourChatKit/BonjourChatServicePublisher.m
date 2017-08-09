@@ -6,14 +6,30 @@
 //  Copyright © 2017 MoeMilMeh. All rights reserved.
 //
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Publish Process:
 //
 //    1. Configure a socket for the service
 //    2. Init. and publish a network service
 //    3. Implement delegate methods
 //
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+// Note: Expected flow at this point:
+//
+//      One server (Chat Service ) published on the network
+//      Clients connect to the server by finding the chat
+//      service in bonjour.
+//
+//      Server creates a new connection for each client.
+//      Server retrieves the clients info and stores it.
+//
+//      All the communications from client-to-server and
+//      client-to-client will be done through the server.
+//      This way we can encrypt the payloads and also store
+//      messages when the clients (users) are offline.
+//
+//
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #import "BonjourChatServicePublisher.h"
 #import "BonjourChatSocket.h"
@@ -21,7 +37,7 @@
 #import "BonjourChatConstants.h"
 
 
-@interface BonjourChatServicePublisher () <BonjourChatSocketDelegate, BonjourChatConnectionDelegate>
+@interface BonjourChatServicePublisher () <BonjourChatServerSocketDelegate, BonjourChatConnectionDelegate>
 
 @property (nonatomic) BonjourChatSocket *bonjourChatSocket;
 @property (nonatomic) NSMutableArray<BonjourChatConnection *> *bonjourChatConnections;
@@ -52,7 +68,7 @@
         // 1. Configure a socket
         //----------------------------
         _bonjourChatSocket = [[BonjourChatSocket alloc] initWithPort:port];
-        [_bonjourChatSocket setDelegate:self];
+        [_bonjourChatSocket setServerDelegate:self];
         _bonjourChatConnections = [NSMutableArray array];
         
         //-----------------------------
@@ -82,6 +98,11 @@
         
         [[self service] publishWithOptions:NSNetServiceListenForConnections];
     }
+}
+
+- (void)stopPublish
+{
+    [[self service] stop];
 }
 
 - (void)updateRecordData:(NSData *)recordData
