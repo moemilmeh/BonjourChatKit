@@ -96,7 +96,7 @@
         [self setUserDesiredSexTXTRecord:[self userDesiredSex]];
         [self setUserDesiredAgeTXTRecord:[self userDesiredAge]];
         
-        [[self service] publishWithOptions:NSNetServiceListenForConnections];
+        [[self service] publishWithOptions:0];
     }
 }
 

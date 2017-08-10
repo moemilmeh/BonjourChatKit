@@ -196,7 +196,7 @@
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)moreComing
 {
-    NSLog(@"Service browser: %@ did find service: %@ and more coming: %@", browser, service, @(moreComing));
+    NSLog(@"Service browser: %@ did find service: %@ and more coming: %@", browser, [service name], @(moreComing));
     
     if ([[service type] isEqualToString:[self serviceType]]) {
         [[self disocveredChatServices] addObject:service];

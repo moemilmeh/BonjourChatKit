@@ -15,7 +15,6 @@
 @interface BonjourChatSocket : NSObject
 
 @property (nonatomic, readonly) int port;
-@property (nonatomic, readonly) int ipv6Port;
 
 @property (nonatomic, weak) id<BonjourChatServerSocketDelegate>serverDelegate;
 

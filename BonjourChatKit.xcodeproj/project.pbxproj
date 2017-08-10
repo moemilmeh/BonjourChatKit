@@ -22,6 +22,7 @@
 		965E75511F397516005071DA /* BonjourChatConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 965E754F1F397516005071DA /* BonjourChatConstants.h */; };
 		965E75521F397516005071DA /* BonjourChatConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 965E75501F397516005071DA /* BonjourChatConstants.m */; };
 		965E75531F397516005071DA /* BonjourChatConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 965E75501F397516005071DA /* BonjourChatConstants.m */; };
+		965E75591F3C0A0C005071DA /* publisher.py in Resources */ = {isa = PBXBuildFile; fileRef = 965E75581F3C0A0C005071DA /* publisher.py */; };
 		9698ABB01F2D2A65002A5929 /* BonjourChatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9698ABA61F2D2A65002A5929 /* BonjourChatKit.framework */; };
 		9698ABB51F2D2A65002A5929 /* BonjourChatKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9698ABB41F2D2A65002A5929 /* BonjourChatKitTests.m */; };
 		9698ABB71F2D2A65002A5929 /* BonjourChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -50,6 +51,7 @@
 		965E754B1F3972E5005071DA /* BonjourChatServiceBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourChatServiceBrowser.m; sourceTree = "<group>"; };
 		965E754F1F397516005071DA /* BonjourChatConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourChatConstants.h; sourceTree = "<group>"; };
 		965E75501F397516005071DA /* BonjourChatConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourChatConstants.m; sourceTree = "<group>"; };
+		965E75581F3C0A0C005071DA /* publisher.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = publisher.py; sourceTree = "<group>"; };
 		9698ABA61F2D2A65002A5929 /* BonjourChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BonjourChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BonjourChatKit.h; sourceTree = "<group>"; };
 		9698ABAA1F2D2A65002A5929 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -79,6 +81,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		965E75571F3C09D0005071DA /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				965E75581F3C0A0C005071DA /* publisher.py */,
+			);
+			name = Samples;
+			sourceTree = "<group>";
+		};
 		9698AB9C1F2D2A65002A5929 = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +123,7 @@
 				9643CF3C1F303B1B00CE9DDB /* BonjourChatConnection.m */,
 				965E754F1F397516005071DA /* BonjourChatConstants.h */,
 				965E75501F397516005071DA /* BonjourChatConstants.m */,
+				965E75571F3C09D0005071DA /* Samples */,
 			);
 			path = BonjourChatKit;
 			sourceTree = "<group>";
@@ -235,6 +246,7 @@
 			files = (
 				D130C2841F3BCAB600DB7329 /* PythonBridgeScriptSetup.sh in Resources */,
 				D1A9BB521F3BBCC700D18C9C /* BonjourChatKit.py in Resources */,
+				965E75591F3C0A0C005071DA /* publisher.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,5 @@
 """
-    BonjourChatKit.h
+    BonjourChatKit.py
     BonjourChatKit
     
     Created by MMM on 8/9/17.

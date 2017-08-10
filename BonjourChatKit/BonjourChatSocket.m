@@ -123,7 +123,7 @@ static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDat
     
     sin6.sin6_len = sizeof(sin6);
     sin6.sin6_family = AF_INET6;
-    sin6.sin6_port = htons(port);
+    sin6.sin6_port = htons(_port);
     sin6.sin6_addr = in6addr_any;
     
     CFDataRef sin6cfd = CFDataCreate(kCFAllocatorDefault, (UInt8 *)&sin6, sizeof(sin6));
@@ -139,7 +139,6 @@ static void socketAcceptCallback(CFSocketRef s, CFSocketCallBackType type, CFDat
     
     NSData *ipv6Addr = (__bridge_transfer NSData *)CFSocketCopyAddress(_ipv6Socket);
     memcpy(&sin6, [ipv6Addr bytes], [ipv4Addr length]);
-    _ipv6Port = ntohs(sin6.sin6_port);
     
     char ipv6Address[INET6_ADDRSTRLEN];
     inet_ntop(AF_INET6, &(sin6.sin6_addr), ipv6Address, sizeof(ipv6Address));

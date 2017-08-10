@@ -12,8 +12,6 @@
 
 @interface BonjourChatKitTests : XCTestCase
 
-@property (nonatomic)BonjourChatServiceBrowser *browser;
-
 @end
 
 @implementation BonjourChatKitTests
@@ -35,25 +33,20 @@
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
     
-//    BonjourChatServicePublisher *publisher = [[BonjourChatServicePublisher alloc] initWithServiceName:@"MoeMil"];
-//    [publisher setUserAge:22];
-//    [publisher setUserDesiredAge:45];
-//    
-//    [publisher setUserSex:UserSexMale];
-//    [publisher setUserDesiredSex:UserSexFemale];
-//    
-//    sleep(3);
-//    
-//    
-//    [publisher publishChatService];
-//    sleep(20);
-//    
+    BonjourChatServicePublisher *publisher = [[BonjourChatServicePublisher alloc] initWithServiceName:@"MoeMil"];
+    [publisher setUserAge:22];
+    [publisher setUserDesiredAge:45];
+    [publisher setUserSex:UserSexMale];
+    [publisher setUserDesiredSex:UserSexFemale];
+    [publisher publishChatService];
+    sleep(5);
+
     
-    // Put the code you want to measure the time of here.
-    _browser = [[BonjourChatServiceBrowser alloc] initWithServiceType:@"_homekit._tcp." domainName:@"local"];
-    [_browser startBrowsing];
+    BonjourChatServiceBrowser *browser = [[BonjourChatServiceBrowser alloc] initWithServiceType:@"_chat._tcp." domainName:@"local"];
+    [browser startBrowsing];
+
     
-    sleep(10);
+    [[NSRunLoop mainRunLoop] run];
     
 }
 
