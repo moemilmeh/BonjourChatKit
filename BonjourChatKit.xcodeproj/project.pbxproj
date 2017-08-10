@@ -25,6 +25,8 @@
 		9698ABB01F2D2A65002A5929 /* BonjourChatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9698ABA61F2D2A65002A5929 /* BonjourChatKit.framework */; };
 		9698ABB51F2D2A65002A5929 /* BonjourChatKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9698ABB41F2D2A65002A5929 /* BonjourChatKitTests.m */; };
 		9698ABB71F2D2A65002A5929 /* BonjourChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9698ABA91F2D2A65002A5929 /* BonjourChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D130C2841F3BCAB600DB7329 /* PythonBridgeScriptSetup.sh in Resources */ = {isa = PBXBuildFile; fileRef = D130C2831F3BCA9100DB7329 /* PythonBridgeScriptSetup.sh */; };
+		D1A9BB521F3BBCC700D18C9C /* BonjourChatKit.py in Resources */ = {isa = PBXBuildFile; fileRef = D1A9BB511F3BBCC700D18C9C /* BonjourChatKit.py */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		9698ABAF1F2D2A65002A5929 /* BonjourChatKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BonjourChatKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9698ABB41F2D2A65002A5929 /* BonjourChatKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BonjourChatKitTests.m; sourceTree = "<group>"; };
 		9698ABB61F2D2A65002A5929 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D130C2831F3BCA9100DB7329 /* PythonBridgeScriptSetup.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = PythonBridgeScriptSetup.sh; sourceTree = "<group>"; };
+		D1A9BB511F3BBCC700D18C9C /* BonjourChatKit.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = BonjourChatKit.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				9698ABA81F2D2A65002A5929 /* BonjourChatKit */,
+				D130C2851F3BCD2C00DB7329 /* Resources */,
 				9698ABB31F2D2A65002A5929 /* BonjourChatKitTests */,
 				9698ABA71F2D2A65002A5929 /* Products */,
 			);
@@ -121,6 +126,15 @@
 			path = BonjourChatKitTests;
 			sourceTree = "<group>";
 		};
+		D130C2851F3BCD2C00DB7329 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D1A9BB511F3BBCC700D18C9C /* BonjourChatKit.py */,
+				D130C2831F3BCA9100DB7329 /* PythonBridgeScriptSetup.sh */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -148,6 +162,7 @@
 				9698ABA21F2D2A65002A5929 /* Frameworks */,
 				9698ABA31F2D2A65002A5929 /* Headers */,
 				9698ABA41F2D2A65002A5929 /* Resources */,
+				D1A9BB4E1F3BB57000D18C9C /* Bridging Support */,
 			);
 			buildRules = (
 			);
@@ -218,6 +233,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D130C2841F3BCAB600DB7329 /* PythonBridgeScriptSetup.sh in Resources */,
+				D1A9BB521F3BBCC700D18C9C /* BonjourChatKit.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +246,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D1A9BB4E1F3BB57000D18C9C /* Bridging Support */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bridging Support";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#######################################\n# Generate Bridging Support for macOS #\n#######################################\n\nif [ \"$PLATFORM_NAME\" != \"macosx\" ]; then\n\n    FW_PATH=\"$TARGET_BUILD_DIR/$PRODUCT_NAME.framework\"\n    BRIDGE_PATH=\"$FW_PATH/Resources/BRIDGE\"\n    BRIDGE_FILE_PATH=\"$BRIDGE_PATH/$PRODUCT_NAME.BRIDGE\"\n    mkdir -p $BRIDGE_PATH\n\n    echo \"Bridging Support File Path: $BRIDGE_FILE_PATH\"\n    gen_bridge_metadata -f $FW_PATH -o $BRIDGE_FILE_PATH\n    echo \"Done\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9698ABA11F2D2A65002A5929 /* Sources */ = {
