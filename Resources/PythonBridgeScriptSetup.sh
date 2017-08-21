@@ -3,7 +3,7 @@
 #  PythonBridgeScriptSetup.sh
 #  BonjourChatKit
 #
-#  Created by Moe Mehrabi on 8/9/17.
+#  Created by MMM on 8/9/17.
 #  Copyright © 2017 MoeMilMeh. All rights reserved.
 
 SCRIPT_PATH="/Library/Frameworks/BonjourChatKit.framework/Versions/Current/Resources/"
